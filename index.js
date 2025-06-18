@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import express from 'express';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
@@ -12,33 +13,35 @@ const __dirname = dirname(__filename);
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+const API_PREFIX = process.env.API_PREFIX || '/api';
 
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Serve static files from the public directory
-app.use('/uploads', express.static(join(__dirname, 'public/uploads')));
+app.use('/uploads', express.static(join(__dirname, process.env.UPLOAD_PATH || 'public/uploads')));
 
 // Routes
-app.use('/api/home', homeRoutes);
-app.use('/api/projects', projectsRoutes);
-app.use('/api/about', aboutRoutes);
-app.use('/api/contact', contactRoutes);
-app.use('/api/creative', creativeRoutes);
+app.use(`${API_PREFIX}/home`, homeRoutes);
+app.use(`${API_PREFIX}/projects`, projectsRoutes);
+app.use(`${API_PREFIX}/about`, aboutRoutes);
+app.use(`${API_PREFIX}/contact`, contactRoutes);
+app.use(`${API_PREFIX}/creative`, creativeRoutes);
 
 // Basic route
 app.get('/', (req, res) => {
   res.json({
     message: 'Welcome to the Portfolio API',
     status: 'active',
-    version: '1.0.0',
+    version: process.env.API_VERSION || '1.0.0',
+    environment: process.env.NODE_ENV,
     endpoints: {
-      home: '/api/home',
-      projects: '/api/projects',
-      about: '/api/about',
-      contact: '/api/contact',
-      creative: '/api/creative'
+      home: `${API_PREFIX}/home`,
+      projects: `${API_PREFIX}/projects`,
+      about: `${API_PREFIX}/about`,
+      contact: `${API_PREFIX}/contact`,
+      creative: `${API_PREFIX}/creative`
     }
   });
 });
@@ -63,4 +66,5 @@ app.use((req, res) => {
 // Start server
 app.listen(PORT, () => {
   console.log(`Server is running on port: http://localhost:${PORT}`);
+  console.log(`Environment: ${process.env.NODE_ENV}`);
 });
