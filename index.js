@@ -20,7 +20,7 @@ const API_PREFIX = process.env.API_PREFIX || '/api';
 const allowedOrigins = [
   process.env.FRONTEND_URL,
   'http://localhost:3000',
-  'https://your-frontend-domain.com' // Add your production frontend URL
+  'https://my-portifolio-sooty-two.vercel.app/' // Add your production frontend URL
 ].filter(Boolean); // Remove any undefined values
 
 app.use(cors({
