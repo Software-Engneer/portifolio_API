@@ -2,6 +2,7 @@ import 'dotenv/config';
 import express from 'express';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
+import cors from 'cors';
 import homeRoutes from './routes/home.js';
 import projectsRoutes from './routes/projects.js';
 import aboutRoutes from './routes/about.js';
@@ -16,6 +17,11 @@ const PORT = process.env.PORT || 5000;
 const API_PREFIX = process.env.API_PREFIX || '/api';
 
 // Middleware
+app.use(cors({
+  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

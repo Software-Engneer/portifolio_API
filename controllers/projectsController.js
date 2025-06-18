@@ -1,21 +1,32 @@
 import { v4 as uuidv4 } from 'uuid';
 
+// Base64 encoded placeholder image (a simple gray rectangle)
+const PLACEHOLDER_IMAGE = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2U5ZWNlZiIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjAiIGZpbGw9IiM2NjYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5Qcm9qZWN0IEltYWdlPC90ZXh0Pjwvc3ZnPg==';
+
 // Sample projects data (in a real app, this would come from a database)
 const projects = [
   {
     id: uuidv4(),
     title: 'E-commerce Platform',
-    description: 'A full-stack e-commerce solution',
-    technologies: ['React', 'Node.js', 'MongoDB'],
-    image: '/images/project1.jpg',
+    description: 'A full-stack e-commerce solution with modern features and responsive design.',
+    technologies: ['React', 'Node.js', 'MongoDB', 'Express'],
+    image: '/images/ecommerce.jpg',
     githubLink: 'https://github.com/Software-Engneer'
   },
   {
     id: uuidv4(),
     title: 'Task Management App',
-    description: 'A collaborative task management application',
-    technologies: ['Vue.js', 'Express', 'PostgreSQL'],
-    image: '/images/project2.jpg',
+    description: 'A collaborative task management application with real-time updates.',
+    technologies: ['Vue.js', 'Express', 'PostgreSQL', 'Socket.io'],
+    image: '/images/taskmanager.jpg',
+    githubLink: 'https://github.com/Software-Engneer'
+  },
+  {
+    id: uuidv4(),
+    title: 'Portfolio Website',
+    description: 'A modern portfolio website showcasing projects and skills.',
+    technologies: ['React', 'Node.js', 'Express', 'MongoDB'],
+    image: '/images/portfolio.jpg',
     githubLink: 'https://github.com/Software-Engneer'
   }
 ];
