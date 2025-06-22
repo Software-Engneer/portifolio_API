@@ -57,6 +57,8 @@ app.use(`${API_PREFIX}/about`, aboutRoutes);
 app.use(`${API_PREFIX}/contact`, contactRoutes);
 app.use(`${API_PREFIX}/creative`, creativeRoutes);
 
+console.log('Creative routes registered at:', `${API_PREFIX}/creative`);
+
 // Basic route
 app.get('/', (req, res) => {
   res.json({

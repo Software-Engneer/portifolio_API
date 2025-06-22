@@ -8,13 +8,16 @@ import {
   rateCreativeWork,
   toggleLikeCreativeWork
 } from '../controllers/creativeController.js';
-import { validateCreativeWork, validateQueryParams } from '../middleware/validation.js';
-import { upload, processImage, handleUploadError } from '../middleware/upload.js';
 
 const router = express.Router();
 
+// Test route to verify creative routes are working
+router.get('/test', (req, res) => {
+  res.json({ message: 'Creative routes are working!' });
+});
+
 // Get all creative works (with optional filtering)
-router.get('/', validateQueryParams, getAllCreativeWorks);
+router.get('/', getAllCreativeWorks);
 
 // Rate a creative work (must come before /:id route)
 router.post('/:id/rate', rateCreativeWork);
@@ -25,26 +28,13 @@ router.post('/:id/like', toggleLikeCreativeWork);
 // Get creative work by ID
 router.get('/:id', getCreativeWorkById);
 
-// Create new creative work with image upload
-router.post('/', 
-  upload.single('image'),
-  processImage,
-  validateCreativeWork,
-  createCreativeWork
-);
+// Create new creative work
+router.post('/', createCreativeWork);
 
-// Update creative work with optional image upload
-router.put('/:id',
-  upload.single('image'),
-  processImage,
-  validateCreativeWork,
-  updateCreativeWork
-);
+// Update creative work
+router.put('/:id', updateCreativeWork);
 
 // Delete creative work
 router.delete('/:id', deleteCreativeWork);
-
-// Error handling for upload errors
-router.use(handleUploadError);
 
 export default router;

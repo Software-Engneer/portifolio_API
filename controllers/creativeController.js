@@ -251,6 +251,7 @@ export const getCreativeWorkById = async (req, res) => {
 // Rate a creative work (1-5 stars)
 export const rateCreativeWork = async (req, res) => {
   try {
+    console.log('rateCreativeWork called with:', req.params, req.body);
     const { id } = req.params;
     const { rating } = req.body;
 
@@ -262,6 +263,7 @@ export const rateCreativeWork = async (req, res) => {
     }
 
     const work = creativeWorks.find(w => w.id === id);
+    console.log('Found work:', work);
 
     if (!work) {
       return res.status(404).json({
@@ -275,6 +277,8 @@ export const rateCreativeWork = async (req, res) => {
     work.totalRatings += 1;
     work.rating = totalRating / work.totalRatings;
 
+    console.log('Updated rating:', work.rating);
+
     res.status(200).json({
       message: 'Rating updated successfully',
       work: {
@@ -285,6 +289,7 @@ export const rateCreativeWork = async (req, res) => {
       }
     });
   } catch (error) {
+    console.error('Error in rateCreativeWork:', error);
     res.status(500).json({
       error: 'Failed to rate creative work',
       message: error.message
