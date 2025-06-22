@@ -19,11 +19,11 @@ router.get('/test', (req, res) => {
 // Get all creative works (with optional filtering)
 router.get('/', getAllCreativeWorks);
 
-// Rate a creative work (must come before /:id route)
-router.post('/:id/rate', rateCreativeWork);
+// Rate a creative work - using explicit route
+router.post('/rate/:id', rateCreativeWork);
 
-// Like/unlike a creative work (must come before /:id route)
-router.post('/:id/like', toggleLikeCreativeWork);
+// Like/unlike a creative work - using explicit route
+router.post('/like/:id', toggleLikeCreativeWork);
 
 // Get creative work by ID
 router.get('/:id', getCreativeWorkById);
