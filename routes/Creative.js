@@ -5,7 +5,6 @@ import {
   createCreativeWork,
   updateCreativeWork,
   deleteCreativeWork,
-  rateCreativeWork,
   toggleLikeCreativeWork
 } from '../controllers/creativeController.js';
 
@@ -16,24 +15,16 @@ router.get('/test', (req, res) => {
   res.json({ message: 'Creative routes are working!' });
 });
 
-// Test rating route to verify rating functionality
-router.post('/test-rating', (req, res) => {
-  res.json({ message: 'Rating route is working!', body: req.body });
-});
-
 // Get all creative works (with optional filtering)
 router.get('/', getAllCreativeWorks);
 
-// Rate a creative work (must come before /:id route)
-router.post('/:id/rate', rateCreativeWork);
-
-// Like/unlike a creative work (must come before /:id route)
+// Like/unlike a creative work
 router.post('/:id/like', toggleLikeCreativeWork);
 
 // Create new creative work
 router.post('/', createCreativeWork);
 
-// Get creative work by ID (must come after specific routes)
+// Get creative work by ID
 router.get('/:id', getCreativeWorkById);
 
 // Update creative work

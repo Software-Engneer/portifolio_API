@@ -67,7 +67,6 @@ console.log('Creative routes registered at:', `${API_PREFIX}/creative`);
 console.log('Available creative endpoints:');
 console.log('- GET /api/creative/test');
 console.log('- GET /api/creative/');
-console.log('- POST /api/creative/:id/rate');
 console.log('- POST /api/creative/:id/like');
 console.log('- GET /api/creative/:id');
 console.log('- POST /api/creative/');

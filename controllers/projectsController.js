@@ -11,8 +11,7 @@ const projects = [
     description: 'A full-stack e-commerce solution with modern features and responsive design.',
     technologies: ['React', 'Node.js', 'MongoDB', 'Express'],
     image: '/images/ecommerce.jpg',
-    githubLink: 'https://github.com/Software-Engneer',
-    rating: 0
+    githubLink: 'https://github.com/Software-Engneer'
   },
   {
     id: uuidv4(),
@@ -20,8 +19,7 @@ const projects = [
     description: 'A collaborative task management application with real-time updates.',
     technologies: ['Vue.js', 'Express', 'PostgreSQL', 'Socket.io'],
     image: '/images/taskmanager.jpg',
-    githubLink: 'https://github.com/Software-Engneer',
-    rating: 0
+    githubLink: 'https://github.com/Software-Engneer'
   },
   {
     id: uuidv4(),
@@ -29,8 +27,7 @@ const projects = [
     description: 'A modern portfolio website showcasing projects and skills.',
     technologies: ['React', 'Node.js', 'Express', 'MongoDB'],
     image: '/images/portfolio.jpg',
-    githubLink: 'https://github.com/Software-Engneer',
-    rating: 0
+    githubLink: 'https://github.com/Software-Engneer'
   }
 ];
 
@@ -133,39 +130,6 @@ export const deleteProject = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       error: 'Failed to delete project',
-      message: error.message
-    });
-  }
-};
-
-// Update project rating
-export const updateProjectRating = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { rating } = req.body;
-    
-    // Validate rating
-    if (rating < 0 || rating > 5 || !Number.isInteger(rating)) {
-      return res.status(400).json({
-        error: 'Invalid rating',
-        message: 'Rating must be an integer between 0 and 5'
-      });
-    }
-
-    const projectIndex = projects.findIndex(p => p.id === id);
-
-    if (projectIndex === -1) {
-      return res.status(404).json({
-        error: 'Project not found',
-        message: `No project found with id ${id}`
-      });
-    }
-
-    projects[projectIndex].rating = rating;
-    res.status(200).json(projects[projectIndex]);
-  } catch (error) {
-    res.status(500).json({
-      error: 'Failed to update project rating',
       message: error.message
     });
   }
