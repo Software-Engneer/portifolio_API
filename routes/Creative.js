@@ -16,20 +16,25 @@ router.get('/test', (req, res) => {
   res.json({ message: 'Creative routes are working!' });
 });
 
+// Test rating route to verify rating functionality
+router.post('/test-rating', (req, res) => {
+  res.json({ message: 'Rating route is working!', body: req.body });
+});
+
 // Get all creative works (with optional filtering)
 router.get('/', getAllCreativeWorks);
 
-// Rate a creative work - using explicit route
-router.post('/rate/:id', rateCreativeWork);
+// Rate a creative work (must come before /:id route)
+router.post('/:id/rate', rateCreativeWork);
 
-// Like/unlike a creative work - using explicit route
-router.post('/like/:id', toggleLikeCreativeWork);
-
-// Get creative work by ID
-router.get('/:id', getCreativeWorkById);
+// Like/unlike a creative work (must come before /:id route)
+router.post('/:id/like', toggleLikeCreativeWork);
 
 // Create new creative work
 router.post('/', createCreativeWork);
+
+// Get creative work by ID (must come after specific routes)
+router.get('/:id', getCreativeWorkById);
 
 // Update creative work
 router.put('/:id', updateCreativeWork);
