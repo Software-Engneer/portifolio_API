@@ -55,6 +55,8 @@ app.use((req, res, next) => {
 // Serve static files from public directory
 app.use('/public', express.static(join(__dirname, 'public')));
 app.use('/uploads', express.static(join(__dirname, 'public', 'uploads')));
+// Serve images for project images
+app.use('/images', express.static(join(__dirname, 'public', 'images')));
 
 // API Routes
 app.use(`${API_PREFIX}/home`, homeRoutes);
