@@ -23,32 +23,32 @@ const allowedOrigins = [
   'https://my-portifolio-sooty-two.vercel.app', // Remove trailing slash for exact match
 ].filter(Boolean); // Remove any undefined values
 
-console.log('Allowed Origins:', allowedOrigins); // Debugging
+console.log('Allowed Origins:', allowedOrigins);
 
 app.use(cors({
-  origin: function(origin, callback) {
+  origin: function (origin, callback) {
     // Allow requests with no origin (like mobile apps or curl requests)
     if (!origin) return callback(null, true);
     
-    if (allowedOrigins.indexOf(origin) === -1) {
-      const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
-      return callback(new Error(msg), false);
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      console.log('Blocked origin:', origin);
+      callback(new Error('Not allowed by CORS'));
     }
-    return callback(null, true);
   },
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
 }));
 
 // Middleware
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
-// Serve static files from the public directory
-app.use('/uploads', express.static(join(__dirname, process.env.UPLOAD_PATH || 'public/uploads')));
+// Serve static files from public directory
+app.use('/public', express.static(join(__dirname, 'public')));
+app.use('/uploads', express.static(join(__dirname, 'public', 'uploads')));
 
-// Routes
+// API Routes
 app.use(`${API_PREFIX}/home`, homeRoutes);
 app.use(`${API_PREFIX}/projects`, projectsRoutes);
 app.use(`${API_PREFIX}/about`, aboutRoutes);
@@ -74,23 +74,32 @@ app.get('/', (req, res) => {
 
 // Error handling middleware
 app.use((err, req, res, next) => {
-  console.error(err.stack);
+  console.error('Error:', err);
+  
+  if (err.message === 'Not allowed by CORS') {
+    return res.status(403).json({
+      error: 'CORS Error',
+      message: 'Origin not allowed'
+    });
+  }
+  
   res.status(500).json({
-    error: 'Something went wrong!',
-    message: process.env.NODE_ENV === 'development' ? err.message : 'Internal server error'
+    error: 'Internal Server Error',
+    message: process.env.NODE_ENV === 'development' ? err.message : 'Something went wrong'
   });
 });
 
 // 404 handler
-app.use((req, res) => {
+app.use('*', (req, res) => {
   res.status(404).json({
     error: 'Not Found',
-    message: 'The requested resource does not exist'
+    message: `Route ${req.originalUrl} not found`
   });
 });
 
 // Start server
 app.listen(PORT, () => {
-  console.log(`Server is running on port: http://localhost:${PORT}`);
-  console.log(`Environment: ${process.env.NODE_ENV}`);
+  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`📊 Environment: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`🌐 API Base URL: http://localhost:${PORT}${API_PREFIX}`);
 });

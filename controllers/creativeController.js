@@ -24,6 +24,10 @@ const creativeWorks = [
     technologies: ['Photoshop', 'Illustrator', 'Procreate'],
     year: 2023,
     featured: true,
+    rating: 4.2,
+    totalRatings: 15,
+    likes: 42,
+    views: 156,
     createdAt: '2023-12-01T00:00:00.000Z'
   },
   {
@@ -38,6 +42,10 @@ const creativeWorks = [
     technologies: ['Illustrator', 'InDesign', 'Photoshop'],
     year: 2023,
     featured: true,
+    rating: 4.8,
+    totalRatings: 23,
+    likes: 67,
+    views: 234,
     createdAt: '2023-11-15T00:00:00.000Z'
   },
   {
@@ -52,6 +60,10 @@ const creativeWorks = [
     technologies: ['Lightroom', 'Photoshop', 'Canon EOS R'],
     year: 2022,
     featured: false,
+    rating: 4.5,
+    totalRatings: 18,
+    likes: 38,
+    views: 189,
     createdAt: '2022-12-01T00:00:00.000Z'
   },
   {
@@ -66,6 +78,10 @@ const creativeWorks = [
     technologies: ['Procreate', 'Photoshop', 'Wacom Tablet'],
     year: 2023,
     featured: true,
+    rating: 4.7,
+    totalRatings: 31,
+    likes: 89,
+    views: 312,
     createdAt: '2023-10-20T00:00:00.000Z'
   },
   {
@@ -80,6 +96,10 @@ const creativeWorks = [
     technologies: ['Figma', 'Adobe XD', 'Sketch'],
     year: 2023,
     featured: false,
+    rating: 4.3,
+    totalRatings: 12,
+    likes: 45,
+    views: 178,
     createdAt: '2023-09-15T00:00:00.000Z'
   },
   {
@@ -94,6 +114,10 @@ const creativeWorks = [
     technologies: ['After Effects', 'Illustrator', 'Premiere Pro'],
     year: 2022,
     featured: true,
+    rating: 4.6,
+    totalRatings: 27,
+    likes: 73,
+    views: 245,
     createdAt: '2022-11-10T00:00:00.000Z'
   },
   {
@@ -108,6 +132,10 @@ const creativeWorks = [
     technologies: ['Procreate', 'Photoshop', 'Corel Painter'],
     year: 2022,
     featured: false,
+    rating: 4.1,
+    totalRatings: 9,
+    likes: 28,
+    views: 134,
     createdAt: '2022-08-20T00:00:00.000Z'
   },
   {
@@ -122,6 +150,10 @@ const creativeWorks = [
     technologies: ['Lightroom', 'Photoshop', 'Studio Lighting'],
     year: 2023,
     featured: false,
+    rating: 4.4,
+    totalRatings: 16,
+    likes: 52,
+    views: 201,
     createdAt: '2023-07-05T00:00:00.000Z'
   }
 ];
@@ -149,6 +181,12 @@ export const getAllCreativeWorks = async (req, res) => {
           return a.title.localeCompare(b.title);
         case 'year':
           return b.year - a.year;
+        case 'rating':
+          return b.rating - a.rating;
+        case 'likes':
+          return b.likes - a.likes;
+        case 'views':
+          return b.views - a.views;
         case 'createdAt':
         default:
           return new Date(b.createdAt) - new Date(a.createdAt);
@@ -198,10 +236,89 @@ export const getCreativeWorkById = async (req, res) => {
       });
     }
 
+    // Increment views when work is viewed
+    work.views += 1;
+
     res.status(200).json(work);
   } catch (error) {
     res.status(500).json({
       error: 'Failed to fetch creative work',
+      message: error.message
+    });
+  }
+};
+
+// Rate a creative work (1-5 stars)
+export const rateCreativeWork = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { rating } = req.body;
+
+    if (!rating || rating < 1 || rating > 5) {
+      return res.status(400).json({
+        error: 'Invalid rating',
+        message: 'Rating must be between 1 and 5'
+      });
+    }
+
+    const work = creativeWorks.find(w => w.id === id);
+
+    if (!work) {
+      return res.status(404).json({
+        error: 'Creative work not found',
+        message: `No creative work found with id ${id}`
+      });
+    }
+
+    // Update rating
+    const totalRating = work.rating * work.totalRatings + rating;
+    work.totalRatings += 1;
+    work.rating = totalRating / work.totalRatings;
+
+    res.status(200).json({
+      message: 'Rating updated successfully',
+      work: {
+        id: work.id,
+        title: work.title,
+        rating: work.rating,
+        totalRatings: work.totalRatings
+      }
+    });
+  } catch (error) {
+    res.status(500).json({
+      error: 'Failed to rate creative work',
+      message: error.message
+    });
+  }
+};
+
+// Like/unlike a creative work
+export const toggleLikeCreativeWork = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const work = creativeWorks.find(w => w.id === id);
+
+    if (!work) {
+      return res.status(404).json({
+        error: 'Creative work not found',
+        message: `No creative work found with id ${id}`
+      });
+    }
+
+    // Toggle like (in a real app, you'd track user-specific likes)
+    work.likes += 1;
+
+    res.status(200).json({
+      message: 'Like updated successfully',
+      work: {
+        id: work.id,
+        title: work.title,
+        likes: work.likes
+      }
+    });
+  } catch (error) {
+    res.status(500).json({
+      error: 'Failed to update like',
       message: error.message
     });
   }
@@ -221,6 +338,10 @@ export const createCreativeWork = async (req, res) => {
       technologies: technologies || [],
       year: year || new Date().getFullYear(),
       featured: featured || false,
+      rating: 0,
+      totalRatings: 0,
+      likes: 0,
+      views: 0,
       createdAt: new Date().toISOString()
     };
 

@@ -85,10 +85,10 @@ export const validateQueryParams = (req, res, next) => {
   }
 
   // Sort validation
-  if (sort && !['title', 'year', 'createdAt'].includes(sort)) {
+  if (sort && !['title', 'year', 'createdAt', 'rating', 'likes', 'views'].includes(sort)) {
     return res.status(400).json({
       error: 'Invalid sort field',
-      message: 'Sort must be one of: title, year, createdAt'
+      message: 'Sort must be one of: title, year, createdAt, rating, likes, views'
     });
   }
 

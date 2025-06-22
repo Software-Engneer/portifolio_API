@@ -4,7 +4,8 @@ import {
   getProjectById,
   createProject,
   updateProject,
-  deleteProject
+  deleteProject,
+  updateProjectRating
 } from '../controllers/projectsController.js';
 
 const router = express.Router();
@@ -20,6 +21,9 @@ router.post('/', createProject);
 
 // Update project
 router.put('/:id', updateProject);
+
+// Update project rating
+router.patch('/:id/rating', updateProjectRating);
 
 // Delete project
 router.delete('/:id', deleteProject);

@@ -4,7 +4,9 @@ import {
   getCreativeWorkById,
   createCreativeWork,
   updateCreativeWork,
-  deleteCreativeWork
+  deleteCreativeWork,
+  rateCreativeWork,
+  toggleLikeCreativeWork
 } from '../controllers/creativeController.js';
 import { validateCreativeWork, validateQueryParams } from '../middleware/validation.js';
 import { upload, processImage, handleUploadError } from '../middleware/upload.js';
@@ -16,6 +18,12 @@ router.get('/', validateQueryParams, getAllCreativeWorks);
 
 // Get creative work by ID
 router.get('/:id', getCreativeWorkById);
+
+// Rate a creative work
+router.post('/:id/rate', rateCreativeWork);
+
+// Like/unlike a creative work
+router.post('/:id/like', toggleLikeCreativeWork);
 
 // Create new creative work with image upload
 router.post('/', 
