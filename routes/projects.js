@@ -23,7 +23,7 @@ router.post('/', createProject);
 router.put('/:id', updateProject);
 
 // Update project rating
-router.patch('/:id/rating', updateProjectRating);
+router.post('/:id/rating', updateProjectRating);
 
 // Delete project
 router.delete('/:id', deleteProject);
