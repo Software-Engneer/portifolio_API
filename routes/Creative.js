@@ -13,17 +13,26 @@ import { upload, processImage, handleUploadError } from '../middleware/upload.js
 
 const router = express.Router();
 
+// Debug middleware to log all requests
+router.use((req, res, next) => {
+  console.log(`Creative route accessed: ${req.method} ${req.path}`);
+  next();
+});
+
 // Get all creative works (with optional filtering)
 router.get('/', validateQueryParams, getAllCreativeWorks);
 
+// Rate a creative work (must come before /:id route)
+router.post('/:id/rate', (req, res, next) => {
+  console.log('Rate route accessed:', req.params.id, req.body);
+  rateCreativeWork(req, res, next);
+});
+
+// Like/unlike a creative work (must come before /:id route)
+router.post('/:id/like', toggleLikeCreativeWork);
+
 // Get creative work by ID
 router.get('/:id', getCreativeWorkById);
-
-// Rate a creative work
-router.post('/:id/rate', rateCreativeWork);
-
-// Like/unlike a creative work
-router.post('/:id/like', toggleLikeCreativeWork);
 
 // Create new creative work with image upload
 router.post('/', 
