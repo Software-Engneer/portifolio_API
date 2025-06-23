@@ -10,7 +10,7 @@ const projects = [
     title: 'E-commerce Platform',
     description: 'A full-stack e-commerce solution with modern features and responsive design.',
     technologies: ['React', 'Node.js', 'MongoDB', 'Express'],
-    image: '/api/images/ecommerce.jpg',
+    image: '/images/ecommerce.jpg',
     githubLink: 'https://github.com/Software-Engneer'
   },
   {
@@ -18,7 +18,7 @@ const projects = [
     title: 'Task Management App',
     description: 'A collaborative task management application with real-time updates.',
     technologies: ['Vue.js', 'Express', 'PostgreSQL', 'Socket.io'],
-    image: '/api/images/taskmanager.jpg',
+    image: '/images/taskmanager.jpg',
     githubLink: 'https://github.com/Software-Engneer'
   },
   {
@@ -26,7 +26,7 @@ const projects = [
     title: 'Portfolio Website',
     description: 'A modern portfolio website showcasing projects and skills.',
     technologies: ['React', 'Node.js', 'Express', 'MongoDB'],
-    image: '/api/images/portfolio.jpg',
+    image: '/images/portfolio.jpg',
     githubLink: 'https://github.com/Software-Engneer'
   }
 ];
