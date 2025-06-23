@@ -57,6 +57,8 @@ app.use('/public', express.static(join(__dirname, 'public')));
 app.use('/uploads', express.static(join(__dirname, 'public', 'uploads')));
 // Serve images for project images
 app.use('/images', express.static(join(__dirname, 'public', 'images')));
+// Serve images under API prefix for frontend compatibility
+app.use(`${API_PREFIX}/images`, express.static(join(__dirname, 'public', 'images')));
 
 // API Routes
 app.use(`${API_PREFIX}/home`, homeRoutes);

@@ -1,0 +1,11 @@
+<svg width="400" height="300" xmlns="http://www.w3.org/2000/svg">
+    <rect width="400" height="300" fill="#27ae60"/>
+    <text x="50%" y="40%" font-family="Arial, sans-serif" font-size="24" fill="#fff" text-anchor="middle">Task Management</text>
+    <text x="50%" y="55%" font-family="Arial, sans-serif" font-size="18" fill="#fff" text-anchor="middle">Application</text>
+    <rect x="50" y="180" width="80" height="60" fill="#2ecc71" rx="5"/>
+    <rect x="150" y="180" width="80" height="60" fill="#f39c12" rx="5"/>
+    <rect x="250" y="180" width="80" height="60" fill="#e74c3c" rx="5"/>
+    <text x="90" y="210" font-family="Arial, sans-serif" font-size="12" fill="#fff" text-anchor="middle">To Do</text>
+    <text x="190" y="210" font-family="Arial, sans-serif" font-size="12" fill="#fff" text-anchor="middle">In Progress</text>
+    <text x="290" y="210" font-family="Arial, sans-serif" font-size="12" fill="#fff" text-anchor="middle">Done</text>
+  </svg>

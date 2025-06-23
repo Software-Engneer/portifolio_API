@@ -1,0 +1,11 @@
+<svg width="400" height="300" xmlns="http://www.w3.org/2000/svg">
+    <rect width="400" height="300" fill="#8e44ad"/>
+    <text x="50%" y="40%" font-family="Arial, sans-serif" font-size="24" fill="#fff" text-anchor="middle">Portfolio</text>
+    <text x="50%" y="55%" font-family="Arial, sans-serif" font-size="18" fill="#fff" text-anchor="middle">Website</text>
+    <circle cx="120" cy="200" r="30" fill="#9b59b6"/>
+    <circle cx="200" cy="200" r="30" fill="#e67e22"/>
+    <circle cx="280" cy="200" r="30" fill="#1abc9c"/>
+    <text x="120" y="205" font-family="Arial, sans-serif" font-size="12" fill="#fff" text-anchor="middle">About</text>
+    <text x="200" y="205" font-family="Arial, sans-serif" font-size="12" fill="#fff" text-anchor="middle">Projects</text>
+    <text x="280" y="205" font-family="Arial, sans-serif" font-size="12" fill="#fff" text-anchor="middle">Contact</text>
+  </svg>
