@@ -1,13 +1,13 @@
 import { v4 as uuidv4 } from 'uuid';
 
-// Base64 encoded placeholder images for different creative types
-const PLACEHOLDER_IMAGES = {
-  digitalArt: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2YwZjhmZiIvPjxjaXJjbGUgY3g9IjEwMCIgY3k9IjEwMCIgcj0iNDAiIGZpbGw9IiNmZjY2NjYiLz48Y2lyY2xlIGN4PSIyMDAiIGN5PSIxMDAiIHI9IjQwIiBmaWxsPSIjNjZmZjY2Ii8+PGNpcmNsZSBjeD0iMTUwIiBjeT0iMTUwIiByPSI0MCIgZmlsbD0iIzY2NjZmZiIvPjx0ZXh0IHg9IjUwJSIgeT0iMTkwIiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTIiIGZpbGw9IiM2NjYiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkRpZ2l0YWwgQXJ0PC90ZXh0Pjwvc3ZnPg==',
-  branding: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2Y5ZjlmOSIvPjxyZWN0IHg9IjUwIiB5PSI1MCIgd2lkdGg9IjIwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9IiMzMzMiLz48dGV4dCB4PSIxNTAiIHk9IjEwNSIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE2IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+QnJhbmQ8L3RleHQ+PHRleHQgeD0iNTAlIiB5PSIxOTAiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMiIgZmlsbD0iIzY2NiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+QnJhbmRpbmc8L3RleHQ+PC9zdmc+',
-  photography: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzMzMyIvPjxyZWN0IHg9IjEwIiB5PSIxMCIgd2lkdGg9IjI4MCIgaGVpZ2h0PSIxODAiIGZpbGw9IiM2NjYiLz48Y2lyY2xlIGN4PSIxNTAiIGN5PSIxMDAiIHI9IjMwIiBmaWxsPSIjOTk5Ii8+PGNpcmNsZSBjeD0iMTUwIiBjeT0iMTAwIiByPSIyMCIgZmlsbD0iI2NjYyIvPjx0ZXh0IHg9IjUwJSIgeT0iMTkwIiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTIiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5QaG90b2dyYXBoeTwvdGV4dD48L3N2Zz4=',
-  illustration: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2ZmZjlmZiIvPjxwYXRoIGQ9Ik01MCAxNTAgTDEwMCA1MCBMMTUwIDEwMCBMMjAwIDUwIEwyNTAgMTUwIiBzdHJva2U9IiMzMzMiIHN0cm9rZS13aWR0aD0iMyIgZmlsbD0ibm9uZSIvPjxjaXJjbGUgY3g9IjEwMCIgY3k9IjUwIiByPSI4IiBmaWxsPSIjZmY2NjY2Ii8+PGNpcmNsZSBjeD0iMTUwIiBjeT0iMTAwIiByPSI4IiBmaWxsPSIjNjZmZjY2Ii8+PGNpcmNsZSBjeD0iMjAwIiBjeT0iNTAiIHI9IjgiIGZpbGw9IiM2NjY2ZmYiLz48dGV4dCB4PSI1MCUiIHk9IjE5MCIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjEyIiBmaWxsPSIjNjY2IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5JbGx1c3RyYXRpb248L3RleHQ+PC9zdmc+',
-  webDesign: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2YwZjhmZiIvPjxyZWN0IHg9IjUwIiB5PSI1MCIgd2lkdGg9IjIwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9IiM2NjYiLz48cmVjdCB4PSI2MCIgeT0iNzAiIHdpZHRoPSIxODAiIGhlaWdodD0iMTUiIGZpbGw9IiM5OTkiLz48cmVjdCB4PSI2MCIgeT0iOTAiIHdpZHRoPSIxNDAiIGhlaWdodD0iMTUiIGZpbGw9IiM5OTkiLz48cmVjdCB4PSI2MCIgeT0iMTEwIiB3aWR0aD0iMTAwIiBoZWlnaHQ9IjE1IiBmaWxsPSIjOTk5Ii8+PHRleHQgeD0iNTAlIiB5PSIxOTAiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMiIgZmlsbD0iIzY2NiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+V2ViIERlc2lnbjwvdGV4dD48L3N2Zz4=',
-  animation: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2Y5ZjlmOSIvPjxjaXJjbGUgY3g9IjEwMCIgY3k9IjEwMCIgcj0iMzAiIGZpbGw9IiNmZjY2NjYiLz48Y2lyY2xlIGN4PSIyMDAiIGN5PSIxMDAiIHI9IjMwIiBmaWxsPSIjNjZmZjY2Ii8+PGxpbmUgeDE9IjEzMCIgeTE9IjEwMCIgeDI9IjE3MCIgeTI9IjEwMCIgc3Ryb2tlPSIjMzMzIiBzdHJva2Utd2lkdGg9IjMiLz48dGV4dCB4PSI1MCUiIHk9IjE5MCIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjEyIiBmaWxsPSIjNjY2IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5BbmltYXRpb248L3RleHQ+PC9zdmc+'
+// Real image paths for different creative types
+const CREATIVE_IMAGES = {
+  digitalArt: '/images/digital-art.jpg',
+  branding: '/images/branding.jpg',
+  photography: '/images/photography.jpg',
+  illustration: '/images/illustration.jpg',
+  webDesign: '/images/web-design.jpg',
+  animation: '/images/animation.jpg'
 };
 
 // Sample creative works data (in a real app, this would come from a database)
@@ -18,8 +18,8 @@ const creativeWorks = [
     type: 'digital-art',
     description: 'A collection of digital artworks exploring modern aesthetics and color theory',
     images: [
-      PLACEHOLDER_IMAGES.digitalArt,
-      PLACEHOLDER_IMAGES.illustration
+      CREATIVE_IMAGES.digitalArt,
+      CREATIVE_IMAGES.illustration
     ],
     technologies: ['Photoshop', 'Illustrator', 'Procreate'],
     year: 2023,
@@ -34,8 +34,8 @@ const creativeWorks = [
     type: 'branding',
     description: 'Complete brand identity design for a tech startup including logo, color palette, and style guide',
     images: [
-      PLACEHOLDER_IMAGES.branding,
-      PLACEHOLDER_IMAGES.digitalArt
+      CREATIVE_IMAGES.branding,
+      CREATIVE_IMAGES.digitalArt
     ],
     technologies: ['Illustrator', 'InDesign', 'Photoshop'],
     year: 2023,
@@ -50,8 +50,8 @@ const creativeWorks = [
     type: 'photography',
     description: 'Urban landscape photography series capturing the essence of city life',
     images: [
-      PLACEHOLDER_IMAGES.photography,
-      PLACEHOLDER_IMAGES.digitalArt
+      CREATIVE_IMAGES.photography,
+      CREATIVE_IMAGES.digitalArt
     ],
     technologies: ['Lightroom', 'Photoshop', 'Canon EOS R'],
     year: 2022,
@@ -66,8 +66,8 @@ const creativeWorks = [
     type: 'illustration',
     description: 'A series of character illustrations for a children\'s book project',
     images: [
-      PLACEHOLDER_IMAGES.illustration,
-      PLACEHOLDER_IMAGES.digitalArt
+      CREATIVE_IMAGES.illustration,
+      CREATIVE_IMAGES.digitalArt
     ],
     technologies: ['Procreate', 'Photoshop', 'Wacom Tablet'],
     year: 2023,
@@ -82,8 +82,8 @@ const creativeWorks = [
     type: 'web-design',
     description: 'Modern e-commerce website design with focus on user experience and conversion',
     images: [
-      PLACEHOLDER_IMAGES.webDesign,
-      PLACEHOLDER_IMAGES.branding
+      CREATIVE_IMAGES.webDesign,
+      CREATIVE_IMAGES.branding
     ],
     technologies: ['Figma', 'Adobe XD', 'Sketch'],
     year: 2023,
@@ -98,8 +98,8 @@ const creativeWorks = [
     type: 'animation',
     description: 'Animated logo design with smooth transitions and modern motion graphics',
     images: [
-      PLACEHOLDER_IMAGES.animation,
-      PLACEHOLDER_IMAGES.branding
+      CREATIVE_IMAGES.animation,
+      CREATIVE_IMAGES.branding
     ],
     technologies: ['After Effects', 'Illustrator', 'Premiere Pro'],
     year: 2022,
@@ -114,8 +114,8 @@ const creativeWorks = [
     type: 'digital-art',
     description: 'Collection of abstract digital paintings exploring emotions through color and form',
     images: [
-      PLACEHOLDER_IMAGES.digitalArt,
-      PLACEHOLDER_IMAGES.illustration
+      CREATIVE_IMAGES.digitalArt,
+      CREATIVE_IMAGES.illustration
     ],
     technologies: ['Procreate', 'Photoshop', 'Corel Painter'],
     year: 2022,
@@ -130,8 +130,8 @@ const creativeWorks = [
     type: 'photography',
     description: 'Professional product photography for e-commerce and marketing materials',
     images: [
-      PLACEHOLDER_IMAGES.photography,
-      PLACEHOLDER_IMAGES.webDesign
+      CREATIVE_IMAGES.photography,
+      CREATIVE_IMAGES.webDesign
     ],
     technologies: ['Lightroom', 'Photoshop', 'Studio Lighting'],
     year: 2023,
