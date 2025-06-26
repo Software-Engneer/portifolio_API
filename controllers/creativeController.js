@@ -265,22 +265,36 @@ export const toggleLikeCreativeWork = async (req, res) => {
 // Create new creative work
 export const createCreativeWork = async (req, res) => {
   try {
-    const { title, type, description, images, technologies, year, featured } = req.body;
-
+    let { title, type, description, images, technologies, year, featured } = req.body;
+    // Ensure technologies is always an array
+    if (typeof technologies === 'string') {
+      technologies = technologies.split(',').map(t => t.trim()).filter(Boolean);
+    } else if (!Array.isArray(technologies)) {
+      technologies = [];
+    }
+    // Ensure images is always an array
+    if (typeof images === 'string') {
+      images = images.split(',').map(i => i.trim()).filter(Boolean);
+    } else if (!Array.isArray(images)) {
+      images = [];
+    }
+    // Add processed image if available
+    if (req.processedImage) {
+      images.push(req.processedImage);
+    }
     const newWork = {
       id: uuidv4(),
       title,
       type,
       description,
-      images: images || [],
-      technologies: technologies || [],
+      images,
+      technologies,
       year: year || new Date().getFullYear(),
       featured: featured || false,
       likes: 0,
       views: 0,
       createdAt: new Date().toISOString()
     };
-
     creativeWorks.push(newWork);
     res.status(201).json(newWork);
   } catch (error) {
@@ -296,21 +310,38 @@ export const updateCreativeWork = async (req, res) => {
   try {
     const { id } = req.params;
     const workIndex = creativeWorks.findIndex(w => w.id === id);
-
     if (workIndex === -1) {
       return res.status(404).json({
         error: 'Creative work not found',
         message: `No creative work found with id ${id}`
       });
     }
-
+    // Ensure technologies is always an array
+    let technologies = req.body.technologies;
+    if (typeof technologies === 'string') {
+      technologies = technologies.split(',').map(t => t.trim()).filter(Boolean);
+    } else if (!Array.isArray(technologies)) {
+      technologies = [];
+    }
+    // Ensure images is always an array
+    let images = req.body.images || creativeWorks[workIndex].images || [];
+    if (typeof images === 'string') {
+      images = images.split(',').map(i => i.trim()).filter(Boolean);
+    } else if (!Array.isArray(images)) {
+      images = [];
+    }
+    // Add processed image if available
+    if (req.processedImage) {
+      images.push(req.processedImage);
+    }
     const updatedWork = {
       ...creativeWorks[workIndex],
       ...req.body,
+      images,
+      technologies,
       id, // Preserve the original UUID
       updatedAt: new Date().toISOString()
     };
-
     creativeWorks[workIndex] = updatedWork;
     res.status(200).json(updatedWork);
   } catch (error) {

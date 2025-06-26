@@ -7,6 +7,7 @@ import {
   deleteCreativeWork,
   toggleLikeCreativeWork
 } from '../controllers/creativeController.js';
+import { upload, processImage } from '../middleware/upload.js';
 
 const router = express.Router();
 
@@ -22,13 +23,13 @@ router.get('/', getAllCreativeWorks);
 router.post('/:id/like', toggleLikeCreativeWork);
 
 // Create new creative work
-router.post('/', createCreativeWork);
+router.post('/', upload.single('image'), processImage, createCreativeWork);
 
 // Get creative work by ID
 router.get('/:id', getCreativeWorkById);
 
 // Update creative work
-router.put('/:id', updateCreativeWork);
+router.put('/:id', upload.single('image'), processImage, updateCreativeWork);
 
 // Delete creative work
 router.delete('/:id', deleteCreativeWork);

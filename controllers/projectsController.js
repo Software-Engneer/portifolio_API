@@ -75,12 +75,14 @@ export const createProject = async (req, res) => {
     } else if (!Array.isArray(technologies)) {
       technologies = [];
     }
+    // Use processed image if available
+    const finalImage = req.processedImage || image;
     const newProject = {
       id: uuidv4(),
       title,
       description,
       technologies,
-      image,
+      image: finalImage,
       githubLink
     };
     projects.push(newProject);
@@ -106,9 +108,12 @@ export const updateProject = async (req, res) => {
       });
     }
 
+    // Use processed image if available
+    const finalImage = req.processedImage || req.body.image || projects[projectIndex].image;
     const updatedProject = {
       ...projects[projectIndex],
       ...req.body,
+      image: finalImage,
       id // Preserve the original UUID
     };
 

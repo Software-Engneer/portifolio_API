@@ -6,6 +6,7 @@ import {
   updateProject,
   deleteProject
 } from '../controllers/projectsController.js';
+import { upload, processImage } from '../middleware/upload.js';
 
 const router = express.Router();
 
@@ -16,10 +17,10 @@ router.get('/', getAllProjects);
 router.get('/:id', getProjectById);
 
 // Create new project
-router.post('/', createProject);
+router.post('/', upload.single('image'), processImage, createProject);
 
 // Update project
-router.put('/:id', updateProject);
+router.put('/:id', upload.single('image'), processImage, updateProject);
 
 // Delete project
 router.delete('/:id', deleteProject);
