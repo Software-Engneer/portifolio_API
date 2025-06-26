@@ -68,11 +68,21 @@ export const getProjectById = async (req, res) => {
 // Create new project
 export const createProject = async (req, res) => {
   try {
+    let { title, description, technologies, image, githubLink } = req.body;
+    // Ensure technologies is always an array
+    if (typeof technologies === 'string') {
+      technologies = technologies.split(',').map(t => t.trim()).filter(Boolean);
+    } else if (!Array.isArray(technologies)) {
+      technologies = [];
+    }
     const newProject = {
       id: uuidv4(),
-      ...req.body
+      title,
+      description,
+      technologies,
+      image,
+      githubLink
     };
-
     projects.push(newProject);
     res.status(201).json(newProject);
   } catch (error) {
