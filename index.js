@@ -21,6 +21,8 @@ const allowedOrigins = [
   process.env.FRONTEND_URL,
   'http://localhost:3000',
   'https://my-portifolio-sooty-two.vercel.app', // Remove trailing slash for exact match
+  process.env.ADMIN_URL,
+  'https://admin-gilt-gamma.vercel.app', // Remove trailing slash for exact match
 ].filter(Boolean); // Remove any undefined values
 
 console.log('Allowed Origins:', allowedOrigins);
