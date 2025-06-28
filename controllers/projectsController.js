@@ -45,6 +45,9 @@ export const getAllProjects = async (req, res) => {
       project.description !== 'undefined'
     );
     
+    console.log('📋 Returning projects to frontend:', cleanProjects);
+    console.log('🔗 Projects with projectLink:', cleanProjects.filter(p => p.projectLink));
+    
     res.status(200).json({ projects: cleanProjects });
   } catch (error) {
     res.status(500).json({
@@ -79,6 +82,10 @@ export const getProjectById = async (req, res) => {
 // Create new project
 export const createProject = async (req, res) => {
   try {
+    console.log('📝 Creating new project with data:', req.body);
+    console.log('🔗 Project link received:', req.body.projectLink);
+    console.log('🐙 GitHub link received:', req.body.githubLink);
+    
     let { title, description, technologies, image, githubLink, projectLink } = req.body;
     
     // Validate required fields
@@ -119,6 +126,8 @@ export const createProject = async (req, res) => {
       githubLink: githubLink || '',
       projectLink: projectLink || ''
     };
+    
+    console.log('✅ New project created:', newProject);
     
     projects.push(newProject);
     res.status(201).json(newProject);
