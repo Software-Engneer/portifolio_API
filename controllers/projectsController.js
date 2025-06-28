@@ -11,7 +11,8 @@ const projects = [
     description: 'A full-stack e-commerce solution with modern features and responsive design.',
     technologies: ['React', 'Node.js', 'MongoDB', 'Express'],
     image: '/images/ecommerce.jpg',
-    githubLink: 'https://github.com/Software-Engneer'
+    githubLink: 'https://github.com/Software-Engneer',
+    projectLink: 'https://ecommerce-demo.com'
   },
   {
     id: 'taskmanager-project-002',
@@ -19,7 +20,8 @@ const projects = [
     description: 'A collaborative task management application with real-time updates.',
     technologies: ['Vue.js', 'Express', 'PostgreSQL', 'Socket.io'],
     image: '/images/taskmanager.jpg',
-    githubLink: 'https://github.com/Software-Engneer'
+    githubLink: 'https://github.com/Software-Engneer',
+    projectLink: 'https://taskmanager-demo.com'
   },
   {
     id: 'portfolio-project-003',
@@ -27,7 +29,8 @@ const projects = [
     description: 'A modern portfolio website showcasing projects and skills.',
     technologies: ['React', 'Node.js', 'Express', 'MongoDB'],
     image: '/images/portfolio.jpg',
-    githubLink: 'https://github.com/Software-Engneer'
+    githubLink: 'https://github.com/Software-Engneer',
+    projectLink: 'https://portfolio-demo.com'
   }
 ];
 
@@ -76,7 +79,7 @@ export const getProjectById = async (req, res) => {
 // Create new project
 export const createProject = async (req, res) => {
   try {
-    let { title, description, technologies, image, githubLink } = req.body;
+    let { title, description, technologies, image, githubLink, projectLink } = req.body;
     
     // Validate required fields
     if (!title || title === 'undefined') {
@@ -113,7 +116,8 @@ export const createProject = async (req, res) => {
       description: description.trim(),
       technologies,
       image: finalImage,
-      githubLink: githubLink || ''
+      githubLink: githubLink || '',
+      projectLink: projectLink || ''
     };
     
     projects.push(newProject);
