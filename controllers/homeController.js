@@ -6,8 +6,8 @@ export const getHomeData = async (req, res) => {
       title: 'Welcome to My Portfolio',
       hero: {
         title: 'Full Stack Developer',
-        subtitle: 'Building modern web applications',
-        description: 'Passionate about creating efficient and scalable solutions'
+        subtitle: 'Building modern web and mobile applications',
+        description: 'Hello! am Chikondi Matumula, a passionate software developer with a strong interest in building web applications and exploring emerging technologies'
       },
       featured: {
         title: 'Featured Projects',
