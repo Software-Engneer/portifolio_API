@@ -6,6 +6,15 @@ const PLACEHOLDER_IMAGE = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWl
 // Sample projects data with static IDs
 const projects = [
   {
+    id: 'fullstack-project-000',
+    title: 'Full Stack Developer Portfolio',
+    description: 'A comprehensive full-stack development portfolio showcasing modern web technologies and best practices.',
+    technologies: ['React', 'Node.js', 'MongoDB', 'Express', 'TypeScript'],
+    image: '/images/portfolio.jpg',
+    githubLink: 'https://github.com/Software-Engneer',
+    projectLink: 'https://fullstack-portfolio-demo.com'
+  },
+  {
     id: 'ecommerce-project-001',
     title: 'E-commerce Platform',
     description: 'A full-stack e-commerce solution with modern features and responsive design.',
