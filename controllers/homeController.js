@@ -7,7 +7,7 @@ export const getHomeData = async (req, res) => {
       hero: {
         title: 'Full Stack Developer',
         subtitle: 'Building modern web and mobile applications',
-        description: 'Hello! am Chikondi Matumula, a passionate software developer with a strong interest in building web applications and exploring emerging technologies'
+        description: 'Hello! am Chikondi Matumula, a passionate software developer with a strong interest in building web applications, mobile applications, and exploring emerging technologies'
       },
       featured: {
         title: 'Featured Projects',
@@ -29,8 +29,8 @@ export const getHeroData = async (req, res) => {
   try {
     const heroData = {
       title: 'Full Stack Developer',
-      subtitle: 'Building modern web applications',
-      description: 'Passionate about creating efficient and scalable solutions'
+      subtitle: 'Building modern web and mobile applications',
+      description: 'Passionate about creating efficient and scalable solutions for web and mobile platforms'
     };
 
     res.status(200).json(heroData);
