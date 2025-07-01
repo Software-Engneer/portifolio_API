@@ -1,24 +1,21 @@
 import { v4 as uuidv4 } from 'uuid';
 
-// Sample contact data (in a real app, this would come from a database)
-const contactData = {
-  email: 'your.email@example.com',
-  phone: '+1 234 567 890',
-  location: 'Your Location',
-  social: {
-    github: 'https://github.com/yourusername',
-    linkedin: 'https://linkedin.com/in/yourusername',
-    twitter: 'https://twitter.com/yourusername'
-  }
-};
-
 // Store messages (in a real app, this would be in a database)
 const messages = [];
 
 // Get contact information
 export const getContactInfo = async (req, res) => {
   try {
-    res.status(200).json(contactData);
+    res.status(200).json({
+      email: 'your.email@example.com',
+      phone: '+1 234 567 890',
+      location: 'Your Location',
+      social: {
+        github: 'https://github.com/yourusername',
+        linkedin: 'https://linkedin.com/in/yourusername',
+        twitter: 'https://twitter.com/yourusername'
+      }
+    });
   } catch (error) {
     res.status(500).json({
       error: 'Failed to fetch contact information',
@@ -27,16 +24,16 @@ export const getContactInfo = async (req, res) => {
   }
 };
 
-// Submit contact form
-export const submitContactForm = async (req, res) => {
+// Receive a new message from the frontend (contact form)
+export const receiveMessage = async (req, res) => {
   try {
-    const { name, email, subject, message } = req.body;
+    const { name, email, message } = req.body;
 
     // Validate required fields
-    if (!name || !email || !subject || !message) {
+    if (!name || !email || !message) {
       return res.status(400).json({
         error: 'Missing required fields',
-        message: 'Please provide all required fields: name, email, subject, and message'
+        message: 'Please provide all required fields: name, email, and message'
       });
     }
 
@@ -54,7 +51,6 @@ export const submitContactForm = async (req, res) => {
       id: uuidv4(),
       name,
       email,
-      subject,
       message,
       timestamp: new Date().toISOString()
     };
@@ -69,7 +65,7 @@ export const submitContactForm = async (req, res) => {
 
     res.status(201).json({
       success: true,
-      message: 'Message received! I will get back to you soon.',
+      message: 'Message received!',
       data: newMessage
     });
   } catch (error) {
