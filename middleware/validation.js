@@ -54,11 +54,33 @@ export const validateCreativeWork = (req, res, next) => {
   }
 
   // Technologies array validation
-  if (technologies && !Array.isArray(technologies)) {
-    return res.status(400).json({
-      error: 'Invalid technologies format',
-      message: 'Technologies must be an array'
-    });
+  if (technologies) {
+    console.log('Validation middleware - technologies received:', technologies, 'type:', typeof technologies);
+    let technologiesArray = technologies;
+    
+    // Handle JSON string from frontend
+    if (typeof technologies === 'string') {
+      try {
+        technologiesArray = JSON.parse(technologies);
+        console.log('Validation middleware - parsed JSON:', technologiesArray);
+      } catch (e) {
+        // If not JSON, treat as comma-separated string
+        technologiesArray = technologies.split(',').map(t => t.trim()).filter(Boolean);
+        console.log('Validation middleware - parsed comma-separated:', technologiesArray);
+      }
+    }
+    
+    if (!Array.isArray(technologiesArray)) {
+      console.log('Validation middleware - technologies is not an array:', technologiesArray);
+      return res.status(400).json({
+        error: 'Invalid technologies format',
+        message: 'Technologies must be an array or valid JSON string'
+      });
+    }
+    
+    // Update req.body with parsed technologies
+    req.body.technologies = technologiesArray;
+    console.log('Validation middleware - final technologies array:', req.body.technologies);
   }
 
   next();

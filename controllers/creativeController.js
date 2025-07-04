@@ -123,16 +123,8 @@ export const createCreativeWork = async (req, res) => {
   try {
     let { title, type, description, images, technologies, year, featured } = req.body;
     
-    // Handle technologies field
-    if (typeof technologies === 'string') {
-      try {
-        // Try to parse as JSON first (from frontend)
-        technologies = JSON.parse(technologies);
-      } catch (e) {
-        // If not JSON, treat as comma-separated string
-        technologies = technologies.split(',').map(t => t.trim()).filter(Boolean);
-      }
-    } else if (!Array.isArray(technologies)) {
+    // Handle technologies field (validation middleware should have already converted it to array)
+    if (!Array.isArray(technologies)) {
       technologies = [];
     }
     
@@ -173,16 +165,8 @@ export const updateCreativeWork = async (req, res) => {
     const { id } = req.params;
     let { technologies, images } = req.body;
     
-    // Handle technologies field
-    if (typeof technologies === 'string') {
-      try {
-        // Try to parse as JSON first (from frontend)
-        technologies = JSON.parse(technologies);
-      } catch (e) {
-        // If not JSON, treat as comma-separated string
-        technologies = technologies.split(',').map(t => t.trim()).filter(Boolean);
-      }
-    } else if (!Array.isArray(technologies)) {
+    // Handle technologies field (validation middleware should have already converted it to array)
+    if (!Array.isArray(technologies)) {
       technologies = undefined;
     }
     
