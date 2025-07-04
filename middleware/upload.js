@@ -1,19 +1,5 @@
 import multer from 'multer';
 import sharp from 'sharp';
-import { v4 as uuidv4 } from 'uuid';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
-import fs from 'fs';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-// Ensure uploads directory exists
-const uploadsDir = path.join(__dirname, '../public/uploads');
-if (!fs.existsSync(uploadsDir)) {
-  fs.mkdirSync(uploadsDir, { recursive: true });
-}
 
 // Configure multer storage
 const storage = multer.memoryStorage();
@@ -36,29 +22,29 @@ const upload = multer({
   }
 });
 
-// Process uploaded image
+// Process uploaded image and store as base64
 export const processImage = async (req, res, next) => {
   if (!req.file) {
     return next();
   }
 
   try {
-    const filename = `${uuidv4()}.webp`;
-    const outputPath = path.join(__dirname, '../public/uploads', filename);
-
     // Process image with sharp
-    await sharp(req.file.buffer)
+    const processedBuffer = await sharp(req.file.buffer)
       .resize(1200, 1200, { // Max dimensions
         fit: 'inside',
         withoutEnlargement: true
       })
       .webp({ quality: 80 }) // Convert to WebP format
-      .toFile(outputPath);
+      .toBuffer();
 
-    // Add the processed image path to the request
-    req.processedImage = `/uploads/${filename}`;
+    // Store as base64 - this prevents images from disappearing
+    const base64Image = `data:image/webp;base64,${processedBuffer.toString('base64')}`;
+    req.processedImage = base64Image;
+
     next();
   } catch (error) {
+    console.error('Image upload error:', error);
     next(error);
   }
 };

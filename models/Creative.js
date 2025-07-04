@@ -4,7 +4,7 @@ const CreativeSchema = new mongoose.Schema({
   title: { type: String, required: true },
   type: { type: String, required: true },
   description: { type: String, required: true },
-  images: [String],
+  images: [String], // Will store full Cloudinary URLs
   technologies: [String],
   year: Number,
   featured: Boolean,
