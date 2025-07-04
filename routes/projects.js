@@ -7,6 +7,7 @@ import {
   deleteProject
 } from '../controllers/projectsController.js';
 import { upload, processImage, handleUploadError } from '../middleware/upload.js';
+import { validateProject } from '../middleware/validation.js';
 
 const router = express.Router();
 
@@ -17,10 +18,10 @@ router.get('/', getAllProjects);
 router.get('/:id', getProjectById);
 
 // Create new project
-router.post('/', upload.single('image'), processImage, handleUploadError, createProject);
+router.post('/', upload.single('image'), processImage, handleUploadError, validateProject, createProject);
 
 // Update project
-router.put('/:id', upload.single('image'), processImage, handleUploadError, updateProject);
+router.put('/:id', upload.single('image'), processImage, handleUploadError, validateProject, updateProject);
 
 // Delete project
 router.delete('/:id', deleteProject);
