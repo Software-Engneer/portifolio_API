@@ -1,0 +1,16 @@
+const mongoose = require('mongoose');
+
+const CreativeSchema = new mongoose.Schema({
+  title: { type: String, required: true },
+  type: { type: String, required: true },
+  description: { type: String, required: true },
+  images: [String],
+  technologies: [String],
+  year: Number,
+  featured: Boolean,
+  likes: { type: Number, default: 0 },
+  views: { type: Number, default: 0 },
+  createdAt: { type: Date, default: Date.now }
+});
+
+module.exports = mongoose.model('Creative', CreativeSchema); 
