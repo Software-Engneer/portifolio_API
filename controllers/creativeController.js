@@ -122,19 +122,32 @@ export const toggleLikeCreativeWork = async (req, res) => {
 export const createCreativeWork = async (req, res) => {
   try {
     let { title, type, description, images, technologies, year, featured } = req.body;
+    
+    // Handle technologies field
     if (typeof technologies === 'string') {
-      technologies = technologies.split(',').map(t => t.trim()).filter(Boolean);
+      try {
+        // Try to parse as JSON first (from frontend)
+        technologies = JSON.parse(technologies);
+      } catch (e) {
+        // If not JSON, treat as comma-separated string
+        technologies = technologies.split(',').map(t => t.trim()).filter(Boolean);
+      }
     } else if (!Array.isArray(technologies)) {
       technologies = [];
     }
+    
+    // Handle images field
     if (typeof images === 'string') {
       images = images.split(',').map(i => i.trim()).filter(Boolean);
     } else if (!Array.isArray(images)) {
       images = [];
     }
+    
+    // Add processed image if available
     if (req.processedImage) {
       images.push(req.processedImage);
     }
+    
     const newWork = new Creative({
       title,
       type,
@@ -159,24 +172,38 @@ export const updateCreativeWork = async (req, res) => {
   try {
     const { id } = req.params;
     let { technologies, images } = req.body;
+    
+    // Handle technologies field
     if (typeof technologies === 'string') {
-      technologies = technologies.split(',').map(t => t.trim()).filter(Boolean);
+      try {
+        // Try to parse as JSON first (from frontend)
+        technologies = JSON.parse(technologies);
+      } catch (e) {
+        // If not JSON, treat as comma-separated string
+        technologies = technologies.split(',').map(t => t.trim()).filter(Boolean);
+      }
     } else if (!Array.isArray(technologies)) {
       technologies = undefined;
     }
+    
+    // Handle images field
     if (typeof images === 'string') {
       images = images.split(',').map(i => i.trim()).filter(Boolean);
     } else if (!Array.isArray(images)) {
       images = undefined;
     }
+    
+    // Add processed image if available
     if (req.processedImage && Array.isArray(images)) {
       images.push(req.processedImage);
     }
+    
     const updateData = {
       ...req.body,
       ...(technologies !== undefined ? { technologies } : {}),
       ...(images !== undefined ? { images } : {})
     };
+    
     const updatedWork = await Creative.findByIdAndUpdate(id, updateData, { new: true });
     if (!updatedWork) {
       return res.status(404).json({
