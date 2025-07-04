@@ -2,7 +2,8 @@ import express from 'express';
 import {
   getContactInfo,
   receiveMessage,
-  getAllMessages
+  getAllMessages,
+  deleteMessage
 } from '../controllers/contactController.js';
 
 const router = express.Router();
@@ -15,5 +16,8 @@ router.post('/message', receiveMessage);
 
 // Get all messages (protected route in real app)
 router.get('/messages', getAllMessages);
+
+// Delete a specific message
+router.delete('/messages/:id', deleteMessage);
 
 export default router; 

@@ -86,4 +86,35 @@ export const getAllMessages = async (req, res) => {
       message: error.message
     });
   }
+};
+
+// Delete a specific message
+export const deleteMessage = async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    // Find the message index
+    const messageIndex = messages.findIndex(msg => msg.id === id);
+    
+    if (messageIndex === -1) {
+      return res.status(404).json({
+        error: 'Message not found',
+        message: 'The specified message does not exist'
+      });
+    }
+    
+    // Remove the message from the array
+    const deletedMessage = messages.splice(messageIndex, 1)[0];
+    
+    res.status(200).json({
+      success: true,
+      message: 'Message deleted successfully',
+      data: deletedMessage
+    });
+  } catch (error) {
+    res.status(500).json({
+      error: 'Failed to delete message',
+      message: error.message
+    });
+  }
 }; 
