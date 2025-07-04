@@ -1,7 +1,7 @@
 import express from 'express';
 import {
   getContactInfo,
-  submitContactForm,
+  receiveMessage,
   getAllMessages
 } from '../controllers/contactController.js';
 
@@ -11,7 +11,7 @@ const router = express.Router();
 router.get('/', getContactInfo);
 
 // Submit contact form
-router.post('/message', submitContactForm);
+router.post('/message', receiveMessage);
 
 // Get all messages (protected route in real app)
 router.get('/messages', getAllMessages);
