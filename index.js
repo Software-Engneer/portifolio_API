@@ -24,10 +24,10 @@ connectDB();
 const allowedOrigins = [
   process.env.FRONTEND_URL,
   'http://localhost:3000',
-  'https://my-portifolio-sooty-two.vercel.app', // Remove trailing slash for exact match
+  'https://my-portifolio-sooty-two.vercel.app',
   process.env.ADMIN_URL,
-  'https://admin-gilt-gamma.vercel.app', // Remove trailing slash for exact match
-].filter(Boolean); // Remove any undefined values
+  'https://admin-gilt-gamma.vercel.app',
+].filter(Boolean);
 
 console.log('Allowed Origins:', allowedOrigins);
 
@@ -36,10 +36,15 @@ app.use(cors({
     // Allow requests with no origin (like mobile apps or curl requests)
     if (!origin) return callback(null, true);
     
+    // Log the incoming origin for debugging
+    console.log('Incoming request from origin:', origin);
+    
     if (allowedOrigins.indexOf(origin) !== -1) {
+      console.log('Origin allowed:', origin);
       callback(null, true);
     } else {
-      console.log('Blocked origin:', origin);
+      console.log('Origin blocked:', origin);
+      console.log('Allowed origins:', allowedOrigins);
       callback(new Error('Not allowed by CORS'));
     }
   },
