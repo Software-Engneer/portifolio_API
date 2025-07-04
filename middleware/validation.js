@@ -216,4 +216,44 @@ function isValidUrl(string) {
   } catch (_) {
     return false;
   }
-} 
+}
+
+// Validation middleware for contact messages
+export const validateContactMessage = (req, res, next) => {
+  const { name, email, message } = req.body;
+
+  // Required fields validation
+  if (!name || !email || !message) {
+    return res.status(400).json({
+      error: 'Missing required fields',
+      message: 'Please provide name, email, and message'
+    });
+  }
+
+  // Name length validation
+  if (name.length < 2 || name.length > 50) {
+    return res.status(400).json({
+      error: 'Invalid name length',
+      message: 'Name must be between 2 and 50 characters'
+    });
+  }
+
+  // Email validation
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    return res.status(400).json({
+      error: 'Invalid email format',
+      message: 'Please provide a valid email address'
+    });
+  }
+
+  // Message length validation
+  if (message.length < 10 || message.length > 1000) {
+    return res.status(400).json({
+      error: 'Invalid message length',
+      message: 'Message must be between 10 and 1000 characters'
+    });
+  }
+
+  next();
+}; 

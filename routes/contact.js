@@ -3,8 +3,10 @@ import {
   getContactInfo,
   receiveMessage,
   getAllMessages,
-  deleteMessage
+  deleteMessage,
+  markMessageAsRead
 } from '../controllers/contactController.js';
+import { validateContactMessage } from '../middleware/validation.js';
 
 const router = express.Router();
 
@@ -12,10 +14,13 @@ const router = express.Router();
 router.get('/', getContactInfo);
 
 // Submit contact form
-router.post('/message', receiveMessage);
+router.post('/message', validateContactMessage, receiveMessage);
 
 // Get all messages (protected route in real app)
 router.get('/messages', getAllMessages);
+
+// Mark message as read
+router.patch('/messages/:id/read', markMessageAsRead);
 
 // Delete a specific message
 router.delete('/messages/:id', deleteMessage);

@@ -1,7 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
-
-// Store messages (in a real app, this would be in a database)
-const messages = [];
+import Contact from '../models/Contact.js';
 
 // Get contact information
 export const getContactInfo = async (req, res) => {
@@ -29,39 +27,18 @@ export const receiveMessage = async (req, res) => {
   try {
     const { name, email, message } = req.body;
 
-    // Validate required fields
-    if (!name || !email || !message) {
-      return res.status(400).json({
-        error: 'Missing required fields',
-        message: 'Please provide all required fields: name, email, and message'
-      });
-    }
+    // Create new message in database
+    const newMessage = new Contact({
+      name: name.trim(),
+      email: email.trim(),
+      message: message.trim()
+    });
 
-    // Validate email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      return res.status(400).json({
-        error: 'Invalid email format',
-        message: 'Please provide a valid email address'
-      });
-    }
-
-    // Create new message
-    const newMessage = {
-      id: uuidv4(),
-      name,
-      email,
-      message,
-      timestamp: new Date().toISOString()
-    };
-
-    // Store message
-    messages.push(newMessage);
+    await newMessage.save();
 
     // In a real application, you would:
     // 1. Send an email notification
-    // 2. Store in database
-    // 3. Maybe trigger other notifications
+    // 2. Maybe trigger other notifications
 
     res.status(201).json({
       success: true,
@@ -79,6 +56,7 @@ export const receiveMessage = async (req, res) => {
 // Get all messages (protected route in real app)
 export const getAllMessages = async (req, res) => {
   try {
+    const messages = await Contact.find().sort({ createdAt: -1 });
     res.status(200).json({ messages });
   } catch (error) {
     res.status(500).json({
@@ -93,18 +71,14 @@ export const deleteMessage = async (req, res) => {
   try {
     const { id } = req.params;
     
-    // Find the message index
-    const messageIndex = messages.findIndex(msg => msg.id === id);
+    const deletedMessage = await Contact.findByIdAndDelete(id);
     
-    if (messageIndex === -1) {
+    if (!deletedMessage) {
       return res.status(404).json({
         error: 'Message not found',
         message: 'The specified message does not exist'
       });
     }
-    
-    // Remove the message from the array
-    const deletedMessage = messages.splice(messageIndex, 1)[0];
     
     res.status(200).json({
       success: true,
@@ -114,6 +88,37 @@ export const deleteMessage = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       error: 'Failed to delete message',
+      message: error.message
+    });
+  }
+};
+
+// Mark message as read
+export const markMessageAsRead = async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    const updatedMessage = await Contact.findByIdAndUpdate(
+      id, 
+      { read: true }, 
+      { new: true }
+    );
+    
+    if (!updatedMessage) {
+      return res.status(404).json({
+        error: 'Message not found',
+        message: 'The specified message does not exist'
+      });
+    }
+    
+    res.status(200).json({
+      success: true,
+      message: 'Message marked as read',
+      data: updatedMessage
+    });
+  } catch (error) {
+    res.status(500).json({
+      error: 'Failed to mark message as read',
       message: error.message
     });
   }
