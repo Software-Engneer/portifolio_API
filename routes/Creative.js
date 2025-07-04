@@ -8,6 +8,7 @@ import {
   toggleLikeCreativeWork
 } from '../controllers/creativeController.js';
 import { upload, processImage, handleUploadError } from '../middleware/upload.js';
+import { validateCreativeWork } from '../middleware/validation.js';
 
 const router = express.Router();
 
@@ -23,13 +24,13 @@ router.get('/', getAllCreativeWorks);
 router.post('/:id/like', toggleLikeCreativeWork);
 
 // Create new creative work
-router.post('/', upload.single('image'), processImage, handleUploadError, createCreativeWork);
+router.post('/', upload.single('image'), processImage, handleUploadError, validateCreativeWork, createCreativeWork);
 
 // Get creative work by ID
 router.get('/:id', getCreativeWorkById);
 
 // Update creative work
-router.put('/:id', upload.single('image'), processImage, handleUploadError, updateCreativeWork);
+router.put('/:id', upload.single('image'), processImage, handleUploadError, validateCreativeWork, updateCreativeWork);
 
 // Delete creative work
 router.delete('/:id', deleteCreativeWork);
