@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const CreativeSchema = new mongoose.Schema({
   title: { type: String, required: true },
@@ -13,4 +13,5 @@ const CreativeSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now }
 });
 
-module.exports = mongoose.model('Creative', CreativeSchema); 
+const Creative = mongoose.model('Creative', CreativeSchema);
+export default Creative; 
