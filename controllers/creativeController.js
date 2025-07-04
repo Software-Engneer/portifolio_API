@@ -1,4 +1,4 @@
-const Creative = require('../models/Creative');
+import Creative from '../models/Creative.js';
 
 // Real image paths for different creative types
 const CREATIVE_IMAGES = {
@@ -11,7 +11,7 @@ const CREATIVE_IMAGES = {
 };
 
 // Get all creative works with filtering, sorting, and pagination
-exports.getAllCreativeWorks = async (req, res) => {
+export const getAllCreativeWorks = async (req, res) => {
   try {
     const { type, featured, sort = 'createdAt', page = 1, limit = 10 } = req.query;
     const query = {};
@@ -67,7 +67,7 @@ exports.getAllCreativeWorks = async (req, res) => {
 };
 
 // Get creative work by ID
-exports.getCreativeWorkById = async (req, res) => {
+export const getCreativeWorkById = async (req, res) => {
   try {
     const { id } = req.params;
     const work = await Creative.findById(id);
@@ -90,7 +90,7 @@ exports.getCreativeWorkById = async (req, res) => {
 };
 
 // Like a creative work
-exports.toggleLikeCreativeWork = async (req, res) => {
+export const toggleLikeCreativeWork = async (req, res) => {
   try {
     const { id } = req.params;
     const work = await Creative.findById(id);
@@ -119,7 +119,7 @@ exports.toggleLikeCreativeWork = async (req, res) => {
 };
 
 // Create new creative work
-exports.createCreativeWork = async (req, res) => {
+export const createCreativeWork = async (req, res) => {
   try {
     let { title, type, description, images, technologies, year, featured } = req.body;
     if (typeof technologies === 'string') {
@@ -155,7 +155,7 @@ exports.createCreativeWork = async (req, res) => {
 };
 
 // Update creative work
-exports.updateCreativeWork = async (req, res) => {
+export const updateCreativeWork = async (req, res) => {
   try {
     const { id } = req.params;
     let { technologies, images } = req.body;
@@ -194,7 +194,7 @@ exports.updateCreativeWork = async (req, res) => {
 };
 
 // Delete creative work
-exports.deleteCreativeWork = async (req, res) => {
+export const deleteCreativeWork = async (req, res) => {
   try {
     const { id } = req.params;
     const deletedWork = await Creative.findByIdAndDelete(id);
