@@ -218,23 +218,60 @@ function isValidUrl(string) {
   }
 }
 
+// Input sanitization function
+const sanitizeInput = (input) => {
+  if (typeof input !== 'string') return '';
+  
+  // Remove potentially dangerous characters and scripts
+  return input
+    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+    .replace(/<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi, '')
+    .replace(/javascript:/gi, '')
+    .replace(/on\w+\s*=/gi, '')
+    .replace(/<[^>]*>/g, '')
+    .trim();
+};
+
+// Enhanced email validation
+const isValidEmail = (email) => {
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  return emailRegex.test(email) && email.length <= 254;
+};
+
+// Phone number validation
+const isValidPhone = (phone) => {
+  // Remove all non-digit characters except + for international numbers
+  const cleanPhone = phone.replace(/[^\d+]/g, '');
+  // Check if it's a valid phone number (7-15 digits, optionally starting with +)
+  const phoneRegex = /^[\+]?[1-9][\d]{6,14}$/;
+  return phoneRegex.test(cleanPhone);
+};
+
 // Validation middleware for contact messages
 export const validateContactMessage = (req, res, next) => {
-  const { name, email, message } = req.body;
+  const { firstName, lastName, email, phoneNumber, message } = req.body;
 
   // Required fields validation
-  if (!name || !email || !message) {
+  if (!firstName || !lastName || !email || !phoneNumber || !message) {
     return res.status(400).json({
       error: 'Missing required fields',
-      message: 'Please provide name, email, and message'
+      message: 'Please provide first name, last name, email, phone number, and message'
     });
   }
 
-  // Name length validation
-  if (name.length < 2 || name.length > 50) {
+  // First name length validation
+  if (firstName.length < 2 || firstName.length > 30) {
     return res.status(400).json({
-      error: 'Invalid name length',
-      message: 'Name must be between 2 and 50 characters'
+      error: 'Invalid first name length',
+      message: 'First name must be between 2 and 30 characters'
+    });
+  }
+
+  // Last name length validation
+  if (lastName.length < 2 || lastName.length > 30) {
+    return res.status(400).json({
+      error: 'Invalid last name length',
+      message: 'Last name must be between 2 and 30 characters'
     });
   }
 
@@ -244,6 +281,15 @@ export const validateContactMessage = (req, res, next) => {
     return res.status(400).json({
       error: 'Invalid email format',
       message: 'Please provide a valid email address'
+    });
+  }
+
+  // Phone number validation (basic format)
+  const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/;
+  if (!phoneRegex.test(phoneNumber.replace(/[\s\-\(\)]/g, ''))) {
+    return res.status(400).json({
+      error: 'Invalid phone number format',
+      message: 'Please provide a valid phone number'
     });
   }
 

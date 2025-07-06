@@ -25,12 +25,14 @@ export const getContactInfo = async (req, res) => {
 // Receive a new message from the frontend (contact form)
 export const receiveMessage = async (req, res) => {
   try {
-    const { name, email, message } = req.body;
+    const { firstName, lastName, email, phoneNumber, message } = req.body;
 
     // Create new message in database
     const newMessage = new Contact({
-      name: name.trim(),
+      firstName: firstName.trim(),
+      lastName: lastName.trim(),
       email: email.trim(),
+      phoneNumber: phoneNumber.trim(),
       message: message.trim()
     });
 
