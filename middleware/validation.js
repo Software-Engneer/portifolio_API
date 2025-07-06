@@ -247,9 +247,39 @@ const isValidPhone = (phone) => {
   return phoneRegex.test(cleanPhone);
 };
 
+// Auto-generate random math questions
+const generateMathQuestion = () => {
+  const operations = [
+    { op: '+', func: (a, b) => a + b },
+    { op: '-', func: (a, b) => a - b },
+    { op: '*', func: (a, b) => a * b }
+  ];
+  
+  const operation = operations[Math.floor(Math.random() * operations.length)];
+  
+  // Generate numbers based on operation type
+  let num1, num2;
+  
+  if (operation.op === '+') {
+    num1 = Math.floor(Math.random() * 20) + 1; // 1-20
+    num2 = Math.floor(Math.random() * 20) + 1; // 1-20
+  } else if (operation.op === '-') {
+    num1 = Math.floor(Math.random() * 20) + 10; // 10-29
+    num2 = Math.floor(Math.random() * num1) + 1; // 1 to num1-1
+  } else if (operation.op === '*') {
+    num1 = Math.floor(Math.random() * 10) + 1; // 1-10
+    num2 = Math.floor(Math.random() * 10) + 1; // 1-10
+  }
+  
+  const answer = operation.func(num1, num2);
+  const question = `What is ${num1} ${operation.op} ${num2}?`;
+  
+  return { question, answer: answer.toString() };
+};
+
 // Validation middleware for contact messages
 export const validateContactMessage = (req, res, next) => {
-  const { firstName, lastName, email, phoneNumber, message } = req.body;
+  const { firstName, lastName, email, phoneNumber, message, securityAnswer, securityQuestion } = req.body;
 
   // Required fields validation
   if (!firstName || !lastName || !email || !phoneNumber || !message) {
@@ -284,9 +314,59 @@ export const validateContactMessage = (req, res, next) => {
     });
   }
 
-  // Phone number validation (basic format)
+  // Phone number validation with special rule for +265
   const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/;
-  if (!phoneRegex.test(phoneNumber.replace(/[\s\-\(\)]/g, ''))) {
+  const cleanPhone = phoneNumber.replace(/[\s\-\(\)]/g, '');
+  
+  // Check if phone starts with +265 (Malawi country code)
+  if (cleanPhone.startsWith('+265')) {
+    // For +265 numbers, require security question
+    if (!securityAnswer) {
+      const newQuestion = generateMathQuestion();
+      return res.status(400).json({
+        error: 'Security verification required',
+        message: 'Please answer the security question to continue',
+        securityQuestion: newQuestion.question,
+        requiresSecurity: true
+      });
+    }
+    
+    // Validate security answer by parsing the question
+    if (securityQuestion) {
+      const questionMatch = securityQuestion.match(/What is (\d+) ([+\-*]) (\d+)\?/);
+      if (questionMatch) {
+        const [, num1, op, num2] = questionMatch;
+        let expectedAnswer;
+        
+        switch (op) {
+          case '+':
+            expectedAnswer = (parseInt(num1) + parseInt(num2)).toString();
+            break;
+          case '-':
+            expectedAnswer = (parseInt(num1) - parseInt(num2)).toString();
+            break;
+          case '*':
+            expectedAnswer = (parseInt(num1) * parseInt(num2)).toString();
+            break;
+          default:
+            expectedAnswer = null;
+        }
+        
+        if (expectedAnswer && securityAnswer.toLowerCase() !== expectedAnswer.toLowerCase()) {
+          const newQuestion = generateMathQuestion();
+          return res.status(400).json({
+            error: 'Incorrect security answer',
+            message: 'Please answer the security question correctly',
+            securityQuestion: newQuestion.question,
+            requiresSecurity: true
+          });
+        }
+      }
+    }
+  }
+  
+  // Regular phone validation
+  if (!phoneRegex.test(cleanPhone)) {
     return res.status(400).json({
       error: 'Invalid phone number format',
       message: 'Please provide a valid phone number'
