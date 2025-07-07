@@ -222,4 +222,28 @@ export const deleteCreativeWork = async (req, res) => {
       message: error.message
     });
   }
+};
+
+// Update only the status of a creative work
+export const updateCreativeStatus = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+    if (!['Active', 'Inactive'].includes(status)) {
+      return res.status(400).json({ error: 'Invalid status value' });
+    }
+    const updatedWork = await Creative.findByIdAndUpdate(id, { status }, { new: true });
+    if (!updatedWork) {
+      return res.status(404).json({
+        error: 'Creative work not found',
+        message: `No creative work found with id ${id}`
+      });
+    }
+    res.status(200).json(updatedWork);
+  } catch (error) {
+    res.status(500).json({
+      error: 'Failed to update creative work status',
+      message: error.message
+    });
+  }
 }; 

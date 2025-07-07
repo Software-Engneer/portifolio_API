@@ -10,7 +10,8 @@ const CreativeSchema = new mongoose.Schema({
   featured: Boolean,
   likes: { type: Number, default: 0 },
   views: { type: Number, default: 0 },
-  createdAt: { type: Date, default: Date.now }
+  createdAt: { type: Date, default: Date.now },
+  status: { type: String, enum: ['Active', 'Inactive'], default: 'Active' }
 });
 
 const Creative = mongoose.model('Creative', CreativeSchema);

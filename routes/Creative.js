@@ -5,7 +5,8 @@ import {
   createCreativeWork,
   updateCreativeWork,
   deleteCreativeWork,
-  toggleLikeCreativeWork
+  toggleLikeCreativeWork,
+  updateCreativeStatus
 } from '../controllers/creativeController.js';
 import { upload, processImage, handleUploadError } from '../middleware/upload.js';
 import { validateCreativeWork } from '../middleware/validation.js';
@@ -34,5 +35,8 @@ router.put('/:id', upload.single('image'), processImage, handleUploadError, vali
 
 // Delete creative work
 router.delete('/:id', deleteCreativeWork);
+
+// Update only creative work status
+router.patch('/:id/status', updateCreativeStatus);
 
 export default router;

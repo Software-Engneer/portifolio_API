@@ -9,7 +9,8 @@ const ProjectSchema = new mongoose.Schema({
   projectLink: String,
   featured: { type: Boolean, default: false },
   views: { type: Number, default: 0 },
-  createdAt: { type: Date, default: Date.now }
+  createdAt: { type: Date, default: Date.now },
+  status: { type: String, enum: ['Active', 'Inactive'], default: 'Active' }
 });
 
 const Project = mongoose.model('Project', ProjectSchema);

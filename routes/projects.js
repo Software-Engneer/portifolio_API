@@ -4,7 +4,8 @@ import {
   getProjectById,
   createProject,
   updateProject,
-  deleteProject
+  deleteProject,
+  updateProjectStatus
 } from '../controllers/projectsController.js';
 import { upload, processImage, handleUploadError } from '../middleware/upload.js';
 import { validateProject } from '../middleware/validation.js';
@@ -25,5 +26,8 @@ router.put('/:id', upload.single('image'), processImage, handleUploadError, vali
 
 // Delete project
 router.delete('/:id', deleteProject);
+
+// Update only project status
+router.patch('/:id/status', updateProjectStatus);
 
 export default router; 

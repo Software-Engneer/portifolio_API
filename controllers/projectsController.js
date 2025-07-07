@@ -141,4 +141,28 @@ export const deleteProject = async (req, res) => {
       message: error.message
     });
   }
+};
+
+// Update only the status of a project
+export const updateProjectStatus = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+    if (!['Active', 'Inactive'].includes(status)) {
+      return res.status(400).json({ error: 'Invalid status value' });
+    }
+    const updatedProject = await Project.findByIdAndUpdate(id, { status }, { new: true });
+    if (!updatedProject) {
+      return res.status(404).json({
+        error: 'Project not found',
+        message: `No project found with id ${id}`
+      });
+    }
+    res.status(200).json(updatedProject);
+  } catch (error) {
+    res.status(500).json({
+      error: 'Failed to update project status',
+      message: error.message
+    });
+  }
 }; 
