@@ -8,6 +8,7 @@ import projectsRoutes from './routes/projects.js';
 import aboutRoutes from './routes/about.js';
 import contactRoutes from './routes/contact.js';
 import creativeRoutes from './routes/Creative.js';
+import adminRoutes from './routes/admin.js';
 import connectDB from './db.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -78,6 +79,7 @@ app.use(`${API_PREFIX}/projects`, projectsRoutes);
 app.use(`${API_PREFIX}/about`, aboutRoutes);
 app.use(`${API_PREFIX}/contact`, contactRoutes);
 app.use(`${API_PREFIX}/creative`, creativeRoutes);
+app.use(`${API_PREFIX}/admin`, adminRoutes);
 
 console.log('Creative routes registered at:', `${API_PREFIX}/creative`);
 console.log('Available creative endpoints:');
